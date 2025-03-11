@@ -31,7 +31,7 @@
         transform: translateX(-50%);
         display: flex;
       }
-
+      
       #navigation button {
         margin: 0 5px;
         padding: 5px 10px;
@@ -40,6 +40,60 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+      }
+      
+      /* Style pour l'icône d'information */
+      #infoButton {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Style pour la popup */
+      #infoPopup {
+        display: none;
+        position: absolute;
+        bottom: 70px;
+        right: 20px;
+        width: 300px;
+        background-color: rgba(0, 0, 0, 1);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 14px;
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+      
+      #closePopup {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      
+      h3 {
+        margin-top: 0;
+        color: #4fc3f7;
+      }
+      
+      .planet-info {
+        margin-bottom: 10px;
       }
     </style>
   </head>
@@ -50,6 +104,83 @@
       <button id="nextPlanet">Suivant</button>
       <button id="discoverPlanets">Découvrir les planètes</button>
     </div>
+    
+    <!-- Bouton d'information -->
+    <button id="infoButton">i</button>
+    
+    <!-- Popup d'information -->
+    <div id="infoPopup">
+      <button id="closePopup">×</button>
+      <h3>Système Solaire</h3>
+      <p>Bienvenue dans cette animation 3D. Explorez les planètes de notre système solaire et découvrez leurs caractéristiques.</p>
+      
+      <!-- <div class="planet-info">
+        <h4>Soleil</h4>
+        <p>Étoile au centre de notre système solaire. Représente 99.86% de la masse du système solaire.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Mercure</h4>
+        <p>Planète la plus proche du Soleil. Journée mercurienne équivaut à 176 jours terrestres.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Vénus</h4>
+        <p>Souvent appelée "jumelle de la Terre" en raison de sa taille similaire. Atmosphère principalement composée de dioxyde de carbone.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Terre</h4>
+        <p>Notre planète, la seule connue à abriter la vie. Couverte à 71% d'eau.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Mars</h4>
+        <p>Surnommée "la planète rouge". Possède les plus hautes montagnes et le plus grand canyon du système solaire.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Jupiter</h4>
+        <p>Plus grande planète du système solaire. Principalement composée d'hydrogène et d'hélium.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Saturne</h4>
+        <p>Célèbre pour ses anneaux spectaculaires composés principalement de glace et de poussière.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Uranus</h4>
+        <p>Planète qui "roule" sur son orbite en raison de son axe de rotation incliné à près de 90 degrés.</p>
+      </div>
+      
+      <div class="planet-info">
+        <h4>Neptune</h4>
+        <p>Planète la plus éloignée du Soleil. Possède les vents les plus rapides du système solaire.</p>
+      </div> -->
+    </div>
+    
     <script src="main.js"></script>
+    <script>
+      // Logique pour l'affichage de la popup d'information
+      const infoButton = document.getElementById('infoButton');
+      const infoPopup = document.getElementById('infoPopup');
+      const closePopup = document.getElementById('closePopup');
+      
+      infoButton.addEventListener('click', function() {
+        infoPopup.style.display = 'block';
+      });
+      
+      closePopup.addEventListener('click', function() {
+        infoPopup.style.display = 'none';
+      });
+      
+      // Fermer la popup si on clique ailleurs
+      document.addEventListener('click', function(event) {
+        if (!infoPopup.contains(event.target) && event.target !== infoButton) {
+          infoPopup.style.display = 'none';
+        }
+      });
+    </script>
   </body>
 </html>

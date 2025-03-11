@@ -22,7 +22,15 @@ var createDefaultEngine = function () {
 var createScene = function () {
   var scene = new BABYLON.Scene(engine);
 
-  scene.clearColor = new BABYLON.Color3(1, 1, 1);
+  // Ajouter une image de fond simple
+  var background = new BABYLON.Layer(
+    "background",
+    "src/espace.jpg",
+    scene,
+    true
+  );
+  // Rendre le fond transparent pour voir l'image de fond
+  scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 
   BABYLON.SceneLoader.Append(
     "",
@@ -38,7 +46,7 @@ var createScene = function () {
         scene
       );
       camera.attachControl(canvas, true);
-      camera.radius = 1000;
+      camera.radius = 1500;
 
       var light = new BABYLON.HemisphericLight(
         "light",
@@ -60,8 +68,7 @@ var createScene = function () {
       // Créer un conteneur pour le texte avec un fond
       var planetNameContainer = new BABYLON.GUI.Container();
       planetNameContainer.width = "100%";
-      planetNameContainer.height = "50px";
-      planetNameContainer.background = "black";
+      planetNameContainer.height = "60px";
       planetNameContainer.horizontalAlignment =
         BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
       planetNameContainer.verticalAlignment =
@@ -70,7 +77,7 @@ var createScene = function () {
 
       var planetNameText = new BABYLON.GUI.TextBlock();
       planetNameText.text = "Le système solaire"; // Texte par défaut
-      planetNameText.fontSize = 24;
+      planetNameText.fontSize = 30;
       planetNameText.color = "white";
       planetNameText.horizontalAlignment =
         BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Centrer horizontalement
@@ -117,15 +124,19 @@ var createScene = function () {
       };
 
       // Gestionnaires d'événements pour les boutons précédent/suivant
-      document.getElementById("prevPlanet").addEventListener("click", function () {
-        navigateToPlanet(currentPlanetIndex - 1);
-    });
-    
-    document.getElementById("nextPlanet").addEventListener("click", function () {
-        // Boucler à la première planète si on est à la fin
-        navigateToPlanet((currentPlanetIndex + 1) % planets.length); 
-    });
-    
+      document
+        .getElementById("prevPlanet")
+        .addEventListener("click", function () {
+          navigateToPlanet(currentPlanetIndex - 1);
+        });
+
+      document
+        .getElementById("nextPlanet")
+        .addEventListener("click", function () {
+          // Boucler à la première planète si on est à la fin
+          navigateToPlanet((currentPlanetIndex + 1) % planets.length);
+        });
+
       // Gestionnaire d'événements pour le bouton "Découvrir les planètes"
       var discoverButton = document.getElementById("discoverPlanets");
       discoverButton.addEventListener("click", function () {
