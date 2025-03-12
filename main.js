@@ -85,6 +85,22 @@ var createScene = function () {
         BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER; // Centrer verticalement
       planetNameContainer.addControl(planetNameText);
 
+      // Ajouter un bouton "+" à côté du texte du nom de la planète
+      var planetInfoButton = BABYLON.GUI.Button.CreateSimpleButton(
+        "planetInfoButton",
+        "+"
+      );
+      planetInfoButton.width = "30px";
+      planetInfoButton.height = "30px";
+      planetInfoButton.color = "white";
+      planetInfoButton.background = "black";
+      planetInfoButton.horizontalAlignment =
+        BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+      planetInfoButton.verticalAlignment =
+        BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+      planetInfoButton.paddingLeft = "10px";
+      planetNameContainer.addControl(planetInfoButton);
+
       // Noms des planètes
       var planetNames = {
         "Sphere_Material.001_0": "Soleil",
@@ -97,6 +113,30 @@ var createScene = function () {
         "Sphere.007_Material.008_0": "Saturne",
         "Sphere.008_Material.009_0": "Uranus",
         "Sphere.009_Material.011_0": "Neptune",
+      };
+
+      // Informations sur les planètes
+      var planetInfos = {
+        "Sphere_Material.001_0":
+          "Le Soleil est l'étoile au centre de notre système solaire.",
+        "Sphere.001_Material.002_0":
+          "Mercure est la planète la plus proche du Soleil.",
+        "Sphere.002_Material.003_0":
+          "Vénus est connue pour ses conditions atmosphériques extrêmes.",
+        "Sphere.003_Material.004_0":
+          "La Terre est la seule planète connue à abriter la vie.",
+        "Sphere.004_Material.005_0":
+          "La Lune est le seul satellite naturel de la Terre.",
+        "Sphere.005_Material.006_0":
+          "Mars est surnommée la planète rouge en raison de sa couleur.",
+        "Sphere.006_Material.007_0":
+          "Jupiter est la plus grande planète du système solaire.",
+        "Sphere.007_Material.008_0":
+          "Saturne est célèbre pour ses anneaux spectaculaires.",
+        "Sphere.008_Material.009_0":
+          "Uranus a une inclinaison axiale unique parmi les planètes.",
+        "Sphere.009_Material.011_0":
+          "Neptune est connue pour ses vents violents.",
       };
 
       // Liste des planètes dans l'ordre de navigation
@@ -176,6 +216,16 @@ var createScene = function () {
           planetNameText.text = "Planète inconnue";
         }
       }
+
+      // Ajouter un gestionnaire d'événements pour le bouton "+"
+      planetInfoButton.onPointerClickObservable.add(function () {
+        var currentPlanet = planets[currentPlanetIndex];
+        if (planetInfos[currentPlanet.name]) {
+          planetPopupTitle.textContent = planetNames[currentPlanet.name];
+          planetPopupInfo.textContent = planetInfos[currentPlanet.name];
+          planetPopup.style.display = "block";
+        }
+      });
     }
   );
 

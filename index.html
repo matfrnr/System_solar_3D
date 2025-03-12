@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="../babylonjs.ico" />
-    <title>Babylonjs sample code</title>
+    <title>Système solaire</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
@@ -22,7 +21,7 @@
         width: 100vw;
         height: 100vh;
         outline: none;
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
       }
       #navigation {
         position: absolute;
@@ -31,7 +30,6 @@
         transform: translateX(-50%);
         display: flex;
       }
-      
       #navigation button {
         margin: 0 5px;
         padding: 5px 10px;
@@ -41,8 +39,15 @@
         border-radius: 5px;
         cursor: pointer;
       }
-      
-      /* Style pour l'icône d'information */
+      #planetInfoBtn {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 5px;
+        padding: 5px 10px;
+      }
       #infoButton {
         position: absolute;
         bottom: 20px;
@@ -59,9 +64,8 @@
         align-items: center;
         justify-content: center;
       }
-      
-      /* Style pour la popup */
-      #infoPopup {
+      #infoPopup,
+      #planetPopup {
         display: none;
         position: absolute;
         bottom: 70px;
@@ -75,8 +79,8 @@
         max-height: 70vh;
         overflow-y: auto;
       }
-      
-      #closePopup {
+      #closePopup,
+      #closePlanetPopup {
         position: absolute;
         top: 5px;
         right: 10px;
@@ -86,12 +90,10 @@
         font-size: 16px;
         cursor: pointer;
       }
-      
       h3 {
         margin-top: 0;
         color: #4fc3f7;
       }
-      
       .planet-info {
         margin-bottom: 10px;
       }
@@ -104,82 +106,352 @@
       <button id="nextPlanet">Suivant</button>
       <button id="discoverPlanets">Découvrir les planètes</button>
     </div>
-    
-    <!-- Bouton d'information -->
+
     <button id="infoButton">i</button>
-    
-    <!-- Popup d'information -->
+
     <div id="infoPopup">
       <button id="closePopup">×</button>
       <h3>Système Solaire</h3>
-      <p>Bienvenue dans cette animation 3D. Explorez les planètes de notre système solaire et découvrez leurs caractéristiques.</p>
-      
-      <!-- <div class="planet-info">
-        <h4>Soleil</h4>
-        <p>Étoile au centre de notre système solaire. Représente 99.86% de la masse du système solaire.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Mercure</h4>
-        <p>Planète la plus proche du Soleil. Journée mercurienne équivaut à 176 jours terrestres.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Vénus</h4>
-        <p>Souvent appelée "jumelle de la Terre" en raison de sa taille similaire. Atmosphère principalement composée de dioxyde de carbone.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Terre</h4>
-        <p>Notre planète, la seule connue à abriter la vie. Couverte à 71% d'eau.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Mars</h4>
-        <p>Surnommée "la planète rouge". Possède les plus hautes montagnes et le plus grand canyon du système solaire.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Jupiter</h4>
-        <p>Plus grande planète du système solaire. Principalement composée d'hydrogène et d'hélium.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Saturne</h4>
-        <p>Célèbre pour ses anneaux spectaculaires composés principalement de glace et de poussière.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Uranus</h4>
-        <p>Planète qui "roule" sur son orbite en raison de son axe de rotation incliné à près de 90 degrés.</p>
-      </div>
-      
-      <div class="planet-info">
-        <h4>Neptune</h4>
-        <p>Planète la plus éloignée du Soleil. Possède les vents les plus rapides du système solaire.</p>
-      </div> -->
+      <p>
+        Bienvenue dans cette animation 3D. Explorez les planètes de notre
+        système solaire et découvrez leurs caractéristiques.
+      </p>
+      <p>Naviguez au sein de l'univers avec les boutons.</p>
+      <p>
+        Double cliquez sur une planète pour avoir des informations sur celle-ci.
+      </p>
     </div>
-    
-    <script src="main.js"></script>
+
+    <div id="planetPopup">
+      <button id="closePlanetPopup">×</button>
+      <h3 id="planetPopupTitle">Nom de la planète</h3>
+      <p id="planetPopupInfo">Informations sur la planète...</p>
+    </div>
+
     <script>
-      // Logique pour l'affichage de la popup d'information
-      const infoButton = document.getElementById('infoButton');
-      const infoPopup = document.getElementById('infoPopup');
-      const closePopup = document.getElementById('closePopup');
-      
-      infoButton.addEventListener('click', function() {
-        infoPopup.style.display = 'block';
+      const infoButton = document.getElementById("infoButton");
+      const infoPopup = document.getElementById("infoPopup");
+      const closePopup = document.getElementById("closePopup");
+
+      infoButton.addEventListener("click", function () {
+        infoPopup.style.display = "block";
       });
-      
-      closePopup.addEventListener('click', function() {
-        infoPopup.style.display = 'none';
+
+      closePopup.addEventListener("click", function () {
+        infoPopup.style.display = "none";
       });
-      
-      // Fermer la popup si on clique ailleurs
-      document.addEventListener('click', function(event) {
+
+      document.addEventListener("click", function (event) {
         if (!infoPopup.contains(event.target) && event.target !== infoButton) {
-          infoPopup.style.display = 'none';
+          infoPopup.style.display = "none";
         }
+      });
+
+      const planetPopup = document.getElementById("planetPopup");
+      const closePlanetPopup = document.getElementById("closePlanetPopup");
+      const planetPopupTitle = document.getElementById("planetPopupTitle");
+      const planetPopupInfo = document.getElementById("planetPopupInfo");
+      const planetInfoBtn = document.getElementById("planetInfoBtn");
+
+      closePlanetPopup.addEventListener("click", function () {
+        planetPopup.style.display = "none";
+      });
+
+      var canvas = document.getElementById("renderCanvas");
+
+      var startRenderLoop = function (engine, canvas) {
+        engine.runRenderLoop(function () {
+          if (sceneToRender && sceneToRender.activeCamera) {
+            sceneToRender.render();
+          }
+        });
+      };
+
+      var engine = null;
+      var scene = null;
+      var sceneToRender = null;
+      var createDefaultEngine = function () {
+        return new BABYLON.Engine(canvas, true, {
+          preserveDrawingBuffer: true,
+          stencil: true,
+          disableWebGL2Support: false,
+        });
+      };
+
+      var createScene = function () {
+        var scene = new BABYLON.Scene(engine);
+
+        var background = new BABYLON.Layer(
+          "background",
+          "src/espace.jpg",
+          scene,
+          true
+        );
+        scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+
+        BABYLON.SceneLoader.Append(
+          "",
+          "objs/solar_system.glb",
+          scene,
+          function (scene) {
+            var camera = new BABYLON.ArcRotateCamera(
+              "camera",
+              BABYLON.Tools.ToRadians(180),
+              BABYLON.Tools.ToRadians(80),
+              100,
+              BABYLON.Vector3.Zero(),
+              scene
+            );
+            camera.attachControl(canvas, true);
+            camera.radius = 1500;
+
+            var light = new BABYLON.HemisphericLight(
+              "light",
+              new BABYLON.Vector3(0, 1, 0),
+              scene
+            );
+            light.intensity = 0.7;
+
+            var ground = BABYLON.MeshBuilder.CreateGround(
+              "ground",
+              { width: 6, height: 6 },
+              scene
+            );
+
+            var advancedTexture =
+              BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+            var planetNameContainer = new BABYLON.GUI.Container();
+            planetNameContainer.width = "100%";
+            planetNameContainer.height = "60px";
+            planetNameContainer.horizontalAlignment =
+              BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            planetNameContainer.verticalAlignment =
+              BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            advancedTexture.addControl(planetNameContainer);
+
+            var planetNameText = new BABYLON.GUI.TextBlock();
+            planetNameText.text = "Le système solaire";
+            planetNameText.fontSize = 30;
+            planetNameText.color = "white";
+            planetNameText.horizontalAlignment =
+              BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            planetNameText.verticalAlignment =
+              BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            planetNameContainer.addControl(planetNameText);
+
+            var planetNames = {
+              "Sphere_Material.001_0": "Soleil",
+              "Sphere.001_Material.002_0": "Mercure",
+              "Sphere.002_Material.003_0": "Vénus",
+              "Sphere.003_Material.004_0": "Terre",
+              "Sphere.004_Material.005_0": "Lune",
+              "Sphere.005_Material.006_0": "Mars",
+              "Sphere.006_Material.007_0": "Jupiter",
+              "Sphere.007_Material.008_0": "Saturne",
+              "Sphere.008_Material.009_0": "Uranus",
+              "Sphere.009_Material.011_0": "Neptune",
+            };
+            var planetInfos = {
+              "Sphere_Material.001_0":
+                "Le Soleil est l'étoile au centre de notre système solaire.\nIl représente 99,86 % de la masse du système solaire.\nSa température de surface est d'environ 5 500 °C.\nLa lumière du Soleil met environ 8 minutes et 20 secondes pour atteindre la Terre.",
+
+              "Sphere.001_Material.002_0":
+                "Mercure est la planète la plus proche du Soleil.\nC'est la plus petite planète du système solaire.\nElle n'a pas de satellite naturel.\nSa surface est fortement cratérisée.",
+
+              "Sphere.002_Material.003_0":
+                "Vénus est connue pour ses conditions atmosphériques extrêmes.\nSon atmosphère est composée principalement de dioxyde de carbone.\nC'est la planète la plus chaude du système solaire.\nElle tourne sur elle-même dans le sens inverse des autres planètes.",
+
+              "Sphere.003_Material.004_0":
+                "La Terre est la seule planète connue à abriter la vie.\nElle possède un satellite naturel, la Lune.\nSon atmosphère est composée principalement d'azote et d'oxygène.\nEnviron 71 % de sa surface est recouverte d'eau.",
+
+              "Sphere.004_Material.005_0":
+                "La Lune est le seul satellite naturel de la Terre.\nElle est en rotation synchrone avec la Terre, nous montrant toujours la même face.\nSa surface est marquée par de nombreux cratères.\nElle influence les marées terrestres.",
+
+              "Sphere.005_Material.006_0":
+                "Mars est surnommée la planète rouge en raison de sa couleur.\nElle possède deux petits satellites naturels, Phobos et Déimos.\nDes missions spatiales explorent actuellement sa surface à la recherche de traces de vie passée.\nSon atmosphère est très ténue.",
+
+              "Sphere.006_Material.007_0":
+                "Jupiter est la plus grande planète du système solaire.\nElle est composée principalement d'hydrogène et d'hélium.\nElle possède de nombreux satellites naturels, dont les quatre plus grands sont Io, Europe, Ganymède et Callisto.\nLa Grande Tache rouge est une tempête géante qui fait rage sur Jupiter depuis des siècles.",
+
+              "Sphere.007_Material.008_0":
+                "Saturne est célèbre pour ses anneaux spectaculaires.\nCes anneaux sont composés de milliards de particules de glace et de roche.\nElle possède de nombreux satellites naturels, dont Titan est le plus grand et le seul à posséder une atmosphère dense.\nSaturne est également une géante gazeuse.",
+
+              "Sphere.008_Material.009_0":
+                "Uranus a une inclinaison axiale unique parmi les planètes.\nSon axe de rotation est presque parallèle à son plan orbital.\nElle possède un système d'anneaux et de nombreux satellites naturels.\nSa couleur bleu-vert est due à la présence de méthane dans son atmosphère.",
+
+              "Sphere.009_Material.011_0":
+                "Neptune est connue pour ses vents violents.\nC'est la planète la plus éloignée du Soleil.\nElle possède un système d'anneaux et plusieurs satellites naturels, dont Triton est le plus grand.\nSa couleur bleue est due à la présence de méthane dans son atmosphère.",
+            };
+            var planets = [
+              scene.getMeshByName("Sphere_Material.001_0"),
+              scene.getMeshByName("Sphere.001_Material.002_0"),
+              scene.getMeshByName("Sphere.002_Material.003_0"),
+              scene.getMeshByName("Sphere.003_Material.004_0"),
+              scene.getMeshByName("Sphere.004_Material.005_0"),
+              scene.getMeshByName("Sphere.005_Material.006_0"),
+              scene.getMeshByName("Sphere.006_Material.007_0"),
+              scene.getMeshByName("Sphere.007_Material.008_0"),
+              scene.getMeshByName("Sphere.008_Material.009_0"),
+              scene.getMeshByName("Sphere.009_Material.011_0"),
+            ];
+            var currentPlanetIndex = 0;
+
+            var navigateToPlanet = function (index) {
+              if (index >= 0 && index < planets.length) {
+                currentPlanetIndex = index;
+                zoomOnPlanet(planets[currentPlanetIndex]);
+                displayPlanetName(planets[currentPlanetIndex]);
+              }
+            };
+
+            document
+              .getElementById("prevPlanet")
+              .addEventListener("click", function () {
+                navigateToPlanet(currentPlanetIndex - 1);
+              });
+
+            document
+              .getElementById("nextPlanet")
+              .addEventListener("click", function () {
+                navigateToPlanet((currentPlanetIndex + 1) % planets.length);
+              });
+
+            var discoverButton = document.getElementById("discoverPlanets");
+            discoverButton.addEventListener("click", function () {
+              discoverButton.disabled = true;
+
+              navigateToPlanet(0);
+
+              var i = 1;
+              var animationInterval = setInterval(function () {
+                navigateToPlanet(i);
+                i++;
+                if (i >= planets.length) {
+                  clearInterval(animationInterval);
+                  discoverButton.disabled = false;
+                }
+              }, 3000);
+            });
+
+            scene.onPointerDown = function (evt, pickResult) {
+              if (pickResult.hit && pickResult.pickedMesh) {
+                var pickedPlanet = pickResult.pickedMesh;
+                zoomOnPlanet(pickedPlanet);
+                displayPlanetName(pickedPlanet);
+
+                currentPlanetIndex = planets.indexOf(pickedPlanet);
+
+                handlePlanetClick(pickedPlanet);
+              }
+            };
+
+            let clickCount = 0;
+            let clickTimer;
+
+            function handlePlanetClick(planet) {
+              clickCount++;
+
+              if (clickCount === 1) {
+                clickTimer = setTimeout(() => {
+                  clickCount = 0;
+                }, 300);
+              } else if (clickCount === 2) {
+                clearTimeout(clickTimer);
+                clickCount = 0;
+                showPlanetInfo(planet);
+              }
+            }
+
+            function showPlanetInfo(planet) {
+              if (planetInfos[planet.name]) {
+                planetPopupTitle.textContent = planetNames[planet.name];
+                planetPopupInfo.textContent = planetInfos[planet.name];
+                planetPopup.style.display = "block";
+              }
+            }
+
+            function displayPlanetName(planet) {
+              if (planetNames[planet.name]) {
+                planetNameText.text = planetNames[planet.name];
+              } else {
+                planetNameText.text = "Planète inconnue";
+              }
+            }
+
+            planetInfoBtn.addEventListener("click", function () {
+              var currentPlanet = planets[currentPlanetIndex];
+              if (planetInfos[currentPlanet.name]) {
+                planetPopupTitle.textContent = planetNames[currentPlanet.name];
+                planetPopupInfo.textContent = planetInfos[currentPlanet.name];
+                planetPopup.style.display = "block";
+              }
+            });
+          }
+        );
+
+        var zoomOnPlanet = function (planet) {
+          var camera = scene.activeCamera;
+          if (camera) {
+            var targetPosition = planet.getAbsolutePosition().clone();
+
+            var distance = Math.max(
+              planet.getBoundingInfo().boundingSphere.radius * 2,
+              300
+            );
+
+            BABYLON.Animation.CreateAndStartAnimation(
+              "zoomCamera",
+              camera,
+              "target",
+              30,
+              60,
+              camera.target,
+              targetPosition,
+              BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+            );
+            BABYLON.Animation.CreateAndStartAnimation(
+              "zoomCamera",
+              camera,
+              "radius",
+              30,
+              60,
+              camera.radius,
+              distance,
+              BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+            );
+          }
+        };
+
+        return scene;
+      };
+
+      window.initFunction = async function () {
+        var asyncEngineCreation = async function () {
+          try {
+            return createDefaultEngine();
+          } catch (e) {
+            console.log(
+              "the available createEngine function failed. Creating the default engine instead"
+            );
+            return createDefaultEngine();
+          }
+        };
+
+        window.engine = await asyncEngineCreation();
+        if (!engine) throw "engine should not be null.";
+
+        startRenderLoop(engine, canvas);
+
+        window.scene = createScene();
+      };
+
+      initFunction().then(() => {
+        sceneToRender = scene;
+      });
+
+      window.addEventListener("resize", function () {
+        engine.resize();
       });
     </script>
   </body>
