@@ -1,0 +1,359 @@
+html,
+body {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Gill Sans", sans-serif;
+}
+
+/* Styles pour la vue de comparaison améliorée */
+#sizeComparisonContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 1000px;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.planets-comparison {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  min-height: 320px;
+  gap: 10px;
+}
+
+.planet-names {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.planet-circle {
+  border-radius: 50%;
+  margin: 0 5px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.5s, transform 0.5s;
+  cursor: pointer;
+}
+
+.planet-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.planet-name {
+  width: 60px;
+  font-size: 12px;
+  margin: 0 5px;
+}
+
+.planet-relative-size {
+  font-size: 9px;
+  opacity: 0.7;
+  margin-top: 5px;
+}
+
+/* Styles pour la vue détaillée */
+#planet-detail-view {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.back-to-comparison {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-to-comparison:hover {
+  background-color: #555;
+}
+
+.planet-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.planet-circle-detail {
+  border-radius: 50%;
+  margin-bottom: 30px;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+  }
+}
+
+.planet-info-container {
+  text-align: center;
+  max-width: 600px;
+}
+
+.planet-info-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.planet-info-container p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.planet-earth-comparison {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 30px 0;
+  gap: 20px;
+}
+
+.comparison-planet,
+.comparison-earth {
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.comparison-label {
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.planet-details {
+  white-space: pre-line;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  text-align: left;
+}
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+#navigation {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+#navigation button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#planetInfoBtn {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+  padding: 5px 10px;
+}
+#infoButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#infoPopup,
+#planetPopup {
+  display: none;
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+  width: 300px;
+  background-color: rgba(0, 0, 0, 1);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+#closePopup,
+#closePlanetPopup {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+h3 {
+  margin-top: 0;
+  color: #4fc3f7;
+}
+.planet-info {
+  margin-bottom: 10px;
+}
+
+/* Ajoutez ces styles à votre fichier styles.css */
+
+
+
+#closeSizeComparison {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#closeSizeComparison:hover {
+  transform: scale(1.2);
+}
+
+#sizeComparisonContainer h3 {
+  text-align: center;
+  color: #ffd700;
+}
+
+#sizeComparisonContainer h5 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#sizesAnimation {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.planets-comparison {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 65%;
+  margin-bottom: 20px;
+  padding: 10px;
+  overflow-x: auto;
+}
+
+.planet-names {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 10px;
+  height: 35%;
+}
+
+.planet-circle {
+  border-radius: 50%;
+  margin: 0 10px;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.5s, transform 0.5s;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.planet-circle:hover {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.planet-name {
+  font-size: 16px;
+  text-align: center;
+  margin: 0 10px;
+  width: calc(10% - 20px);
+  min-width: 80px;
+  color: white;
+}
+
+.planet-relative-size {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+#compareSizes {
+  background-color: #333;
+  color: white;
+  border: 1px solid #666;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+#compareSizes:hover {
+  background-color: #555;
+}
+
+@media (max-width: 768px) {
+  #sizeComparisonContainer {
+    width: 95%;
+    height: 90%;
+  }
+
+  .planets-comparison {
+    height: 55%;
+  }
+
+  .planet-names {
+    height: 45%;
+  }
+}
