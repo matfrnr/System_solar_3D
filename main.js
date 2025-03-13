@@ -456,21 +456,43 @@ var createScene = function () {
       namesDiv.style.display = "none";
       comparisonTitle1.style.display = "none";
       // Préparer la vue détaillée
+      // ...existing code...
+
+      // Préparer la vue détaillée
       detailView.innerHTML = "";
       detailView.style.display = "flex";
+
+      // Créer un conteneur pour les boutons
+      var buttonContainer = document.createElement("div");
+      buttonContainer.style.display = "flex";
+      buttonContainer.style.gap = "10px"; // Optionnel : ajouter un espace entre les boutons
 
       // Ajouter le bouton retour
       var backButton = document.createElement("button");
       backButton.textContent = "Retour à la comparaison";
       backButton.className = "back-to-comparison";
+      backButton.style.display = "flex"; // Ajouter display flex
+
+      var backButton1 = document.createElement("button");
+      backButton1.textContent = "Accèder à la planète";
+      backButton1.className = "back-to-comparison";
+      backButton1.style.display = "flex"; // Ajouter display flex
+
       backButton.addEventListener("click", function () {
         detailView.style.display = "none";
         planetsDiv.style.display = "flex";
         namesDiv.style.display = "flex";
         comparisonTitle1.style.display = "block";
       });
-      detailView.appendChild(backButton);
 
+      // Ajouter les boutons au conteneur
+      buttonContainer.appendChild(backButton);
+      buttonContainer.appendChild(backButton1);
+
+      // Ajouter le conteneur de boutons à la vue détaillée
+      detailView.appendChild(buttonContainer);
+
+      // ...existing code...
       // Créer un conteneur pour la planète et ses informations
       var detailContainer = document.createElement("div");
       detailContainer.className = "planet-detail-container";
