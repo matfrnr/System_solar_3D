@@ -450,13 +450,12 @@ var createScene = function () {
     });
 
     // Fonction pour afficher une planète en détail
+    // Modification de la fonction showPlanetDetail pour ajouter la fonctionnalité au bouton "Accéder à la planète"
     function showPlanetDetail(planet, planetName, relativeSizeToEarth, color) {
       // Masquer la vue de comparaison
       planetsDiv.style.display = "none";
       namesDiv.style.display = "none";
       comparisonTitle1.style.display = "none";
-      // Préparer la vue détaillée
-      // ...existing code...
 
       // Préparer la vue détaillée
       detailView.innerHTML = "";
@@ -474,7 +473,7 @@ var createScene = function () {
       backButton.style.display = "flex"; // Ajouter display flex
 
       var backButton1 = document.createElement("button");
-      backButton1.textContent = "Accèder à la planète";
+      backButton1.textContent = "Accéder à la planète";
       backButton1.className = "back-to-comparison";
       backButton1.style.display = "flex"; // Ajouter display flex
 
@@ -485,6 +484,28 @@ var createScene = function () {
         comparisonTitle1.style.display = "block";
       });
 
+      // Ajouter la fonctionnalité au bouton "Accéder à la planète"
+      backButton1.addEventListener("click", function () {
+        // Fermer la vue de comparaison de tailles
+        sizeComparisonContainer.style.display = "none";
+
+        // Trouver l'index de la planète dans le tableau planets
+        let planetIndex = -1;
+        for (let i = 0; i < planets.length; i++) {
+          if (planets[i].name === planet.name) {
+            planetIndex = i;
+            break;
+          }
+        }
+
+        // Si la planète est trouvée, naviguer vers elle
+        if (planetIndex !== -1) {
+          currentPlanetIndex = planetIndex;
+          zoomOnPlanet(planets[currentPlanetIndex]);
+          displayPlanetName(planets[currentPlanetIndex]);
+        }
+      });
+
       // Ajouter les boutons au conteneur
       buttonContainer.appendChild(backButton);
       buttonContainer.appendChild(backButton1);
@@ -492,7 +513,6 @@ var createScene = function () {
       // Ajouter le conteneur de boutons à la vue détaillée
       detailView.appendChild(buttonContainer);
 
-      // ...existing code...
       // Créer un conteneur pour la planète et ses informations
       var detailContainer = document.createElement("div");
       detailContainer.className = "planet-detail-container";
@@ -584,7 +604,6 @@ var createScene = function () {
       infoContainer.appendChild(detailsElement);
     }
   }
-
   // Gestion des événements pour les boutons
   compareButton.addEventListener("click", function () {
     createSizeComparison();
